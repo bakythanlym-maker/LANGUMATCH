@@ -1,42 +1,209 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Language Match</title>
-    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Language Match Pro</title>
+    <style>
+        :root {
+            --primary: #ff4b2b; --secondary: #ff416c; --accent: #00d2ff;
+            --bg: #fdfdfd; --card: #fff; --text: #2d3436;
+        }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { margin: 0; font-family: -apple-system, sans-serif; background: #121212; display: flex; justify-content: center; height: 100vh; overflow: hidden; }
+        
+        .app { width: 100%; max-width: 450px; height: 100%; background: var(--bg); display: flex; flex-direction: column; position: relative; }
+        
+        /* Header */
+        header { padding: 15px 20px; background: #fff; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; z-index: 10; }
+        .logo { font-weight: 800; font-size: 1.4rem; background: linear-gradient(to right, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .filter-btn { background: #f0f0f0; border: none; padding: 6px 12px; border-radius: 20px; font-size: 12px; cursor: pointer; }
+
+        /* Screens */
+        .screen { display: none; flex: 1; overflow-y: auto; position: relative; padding: 15px; }
+        .screen.active { display: block; }
+        #screen-swipe.active { display: flex; flex-direction: column; overflow: hidden; }
+
+        /* Tinder Cards */
+        .card-container { flex: 1; position: relative; perspective: 1000px; }
+        .card { 
+            position: absolute; width: 100%; height: 95%; background: var(--card); 
+            border-radius: 25px; overflow: hidden; box-shadow: 0 15px 35px rgba(0,0,0,0.12);
+            transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1), opacity 0.3s;
+            cursor: grab; touch-action: none;
+        }
+        .card img { width: 100%; height: 75%; object-fit: cover; }
+        .card-data { padding: 15px; background: linear-gradient(to top, white 80%, transparent); margin-top: -50px; position: relative; }
+        .lvl { position: absolute; top: -15px; right: 20px; background: var(--accent); color: white; padding: 4px 12px; border-radius: 15px; font-size: 11px; font-weight: bold; }
+
+        /* Chat System */
+        .chat-row { display: flex; align-items: center; gap: 15px; padding: 15px; background: #fff; border-radius: 15px; margin-bottom: 10px; cursor: pointer; border: 1px solid #f0f0f0; }
+        .chat-row img { width: 55px; height: 55px; border-radius: 50%; object-fit: cover; border: 2px solid var(--primary); }
+        
+        #messenger { 
+            position: absolute; inset: 0; background: white; z-index: 100; 
+            display: none; flex-direction: column; 
+        }
+        .msg-header { padding: 15px; border-bottom: 1px solid #eee; display: flex; align-items: center; gap: 15px; }
+        .msg-body { flex: 1; padding: 15px; overflow-y: auto; background: #f9f9fb; }
+        .bubble { padding: 10px 15px; border-radius: 18px; margin-bottom: 8px; max-width: 80%; font-size: 14px; }
+        .bubble.me { background: var(--primary); color: white; align-self: flex-end; margin-left: auto; }
+        .bubble.them { background: #eee; color: var(--text); }
+        .task-card { background: #fff3f0; border: 1px dashed var(--primary); padding: 10px; border-radius: 10px; font-size: 12px; text-align: center; margin: 10px 0; }
+
+        /* Controls */
+        .actions { display: flex; justify-content: center; gap: 20px; padding: 25px; }
+        .circle-btn { width: 65px; height: 65px; border-radius: 50%; border: none; background: #fff; box-shadow: 0 8px 15px rgba(0,0,0,0.08); font-size: 26px; cursor: pointer; transition: 0.2s; }
+        .circle-btn:active { transform: scale(0.85); }
+
+        nav { height: 70px; background: #fff; border-top: 1px solid #eee; display: flex; justify-content: space-around; align-items: center; }
+        .nav-item { border: none; background: none; color: #b2bec3; cursor: pointer; text-align: center; }
+        .nav-item.active { color: var(--primary); font-weight: bold; }
+        
+        .badge-streak { background: #fff3e0; color: #ff9800; padding: 10px; border-radius: 12px; display: flex; align-items: center; gap: 10px; font-weight: bold; }
+    </style>
 </head>
 <body>
 
-    <header class="header">
-        <div class="logo">LanguMatch</div>
-          <nav class="nav">
-              <a href="#">Home</a>
-              <a href="#">About Us</a>
-              <a href="#">Contact</a>
-              <a href="#">My Page</a>
-              <a href="#">Log In</a>
-              
-          </nav>
+<div class="app">
+    <header>
+        <div class="logo">LangMatch</div>
+        <button class="filter-btn">RU / KZ / EN ⚙️</button>
     </header>
 
-    <main class="main">
-        <h1>Tinder for Language Learners</h1>
-        <p>
-            Learn languages through real conversations.  
-            Match with people who want to learn your language and practice together using ready-made topics and tasks.
-        </p>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cupiditate distinctio nesciunt sequi aperiam explicabo aspernatur, dolor numquam a, impedit est doloremque neque fugit dignissimos suscipit! Fugiat ipsam tempore deserunt eligendi?</p>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cupiditate distinctio nesciunt sequi aperiam explicabo aspernatur, dolor numquam a, impedit est doloremque neque fugit dignissimos suscipit! Fugiat ipsam tempore deserunt eligendi?</p>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cupiditate distinctio nesciunt sequi aperiam explicabo aspernatur, dolor numquam a, impedit est doloremque neque fugit dignissimos suscipit! Fugiat ipsam tempore deserunt eligendi?</p>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cupiditate distinctio nesciunt sequi aperiam explicabo aspernatur, dolor numquam a, impedit est doloremque neque fugit dignissimos suscipit! Fugiat ipsam tempore deserunt eligendi?</p>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cupiditate distinctio nesciunt sequi aperiam explicabo aspernatur, dolor numquam a, impedit est doloremque neque fugit dignissimos suscipit! Fugiat ipsam tempore deserunt eligendi?</p>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cupiditate distinctio nesciunt sequi aperiam explicabo aspernatur, dolor numquam a, impedit est doloremque neque fugit dignissimos suscipit! Fugiat ipsam tempore deserunt eligendi?</p>
-        <button class="search-btn">Search a Language Partner</button>
-    </main>
+    <!-- Swipe Screen -->
+    <div id="screen-swipe" class="screen active">
+        <div class="card-container" id="stack"></div>
+        <div class="actions">
+            <button class="circle-btn" style="color: #ff5252" onclick="swipe(false)">✖</button>
+            <button class="circle-btn" style="color: #00ca9d" onclick="swipe(true)">❤</button>
+        </div>
+    </div>
 
-    <footer class="footer">
-        <p>©️ 2026 LanguageMatch. Student Project.</p>
-    </footer>
+    <!-- Chats Screen -->
+    <div id="screen-chats" class="screen">
+        <h3 style="margin-top:0">Ваши собеседники</h3>
+        <div id="chats-list"></div>
+    </div>
+
+    <!-- Topics Screen -->
+    <div id="screen-topics" class="screen">
+        <div class="badge-streak">🔥 Стрик: 7 дней! Сохраняйте темп.</div>
+        <h3 style="margin-bottom:10px">Темы дня</h3>
+        <div class="chat-row" onclick="alert('Тема: Как заказать кофе по-казахски?\nФраза: Маған бір латте беріңізші.')">
+            <div style="font-size:24px">☕</div>
+            <div><strong>Кофейня</strong><br><small>15 новых слов</small></div>
+        </div>
+    </div>
+
+    <!-- Messenger View (Hidden by default) -->
+    <div id="messenger">
+        <div class="msg-header">
+            <button onclick="closeChat()" style="border:none; background:none; font-size:20px">←</button>
+            <img id="msg-img" src="" style="width:40px; height:40px; border-radius:50%">
+            <strong id="msg-name">Name</strong>
+        </div>
+        <div class="msg-body" id="msg-body">
+            <div class="bubble them">Привет! Давай попрактикуем казахский?</div>
+            <div class="task-card">🎯 <b>Задание:</b> Расскажи о своем хобби, используя 3 новых слова из раздела "Темы".</div>
+        </div>
+        <div style="padding:15px; border-top:1px solid #eee; display:flex; gap:10px">
+            <input type="text" placeholder="Сообщение..." style="flex:1; padding:10px; border-radius:20px; border:1px solid #ddd">
+            <button style="border:none; background:var(--primary); color:white; border-radius:50%; width:40px">✈️</button>
+        </div>
+    </div>
+
+    <nav>
+        <button class="nav-item active" onclick="showScreen('swipe', this)">🎴<br><small>Свайп</small></button>
+        <button class="nav-item" onclick="showScreen('topics', this)">📚<br><small>Темы</small></button>
+        <button class="nav-item" onclick="showScreen('chats', this)">💬<br><small>Чаты</small></button>
+    </nav>
+</div>
+
+<script>
+    const users = [
+        { id: 1, name: "Динара", native: "Kazakh 🇰🇿", learn: "English 🇺🇸", lvl: "Intermediate", img: "https://images.unsplash.com" },
+        { id: 2, name: "Mark", native: "English 🇺🇸", learn: "Russian 🇷🇺", lvl: "Beginner", img: "https://images.unsplash.com" },
+        { id: 3, name: "Серик", native: "Kazakh 🇰🇿", learn: "English 🇺🇸", lvl: "Advanced", img: "https://images.unsplash.com" }
+    ];
+
+    let currentIdx = 0;
+    let matches = JSON.parse(localStorage.getItem('matches')) || [];
+
+    function render() {
+        const stack = document.getElementById('stack');
+        stack.innerHTML = '';
+        users.forEach((u, i) => {
+            if (i < currentIdx) return;
+            const card = document.createElement('div');
+            card.className = 'card';
+            card.style.zIndex = users.length - i;
+            card.innerHTML = `
+                <img src="${u.img}">
+                <div class="card-data">
+                    <div class="lvl">${u.lvl}</div>
+                    <h2 style="margin:0">${u.name}</h2>
+                    <p style="margin:8px 0; font-size:13px">🗣️ ${u.native} → 📖 ${u.learn}</p>
+                    <p style="color:#666; font-size:13px">Привет! Давай меняться знаниями.</p>
+                </div>
+            `;
+            stack.appendChild(card);
+        });
+        updateChats();
+    }
+
+    function swipe(isLike) {
+        const cards = document.querySelectorAll('.card');
+        if(!cards.length) return;
+        const top = cards[0];
+        top.style.transform = ⁠ translate(${isLike ? 500 : -500}px, -100px) rotate(${isLike ? 45 : -45}deg) ⁠;
+        top.style.opacity = '0';
+        
+        if(isLike) {
+            const user = users[currentIdx];
+            if(!matches.find(m => m.id === user.id)) {
+                matches.push(user);
+                localStorage.setItem('matches', JSON.stringify(matches));
+            }
+        }
+        currentIdx++;
+        setTimeout(render, 400);
+    }
+
+    function updateChats() {
+        const list = document.getElementById('chats-list');
+        if(!matches.length) {
+            list.innerHTML = ⁠ <p style="color:#aaa; text-align:center; margin-top:40px">Лайкни кого-нибудь, чтобы начать чат!</p> ⁠;
+            return;
+        }
+        list.innerHTML = matches.map(m => `
+            <div class="chat-row" onclick="openChat('${m.name}', '${m.img}')">
+                <img src="${m.img}">
+                <div>
+                    <strong>${m.name}</strong><br>
+                    <small style="color:var(--primary)">Хочет практиковать ${m.learn}</small>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    function openChat(name, img) {
+        document.getElementById('msg-name').innerText = name;
+        document.getElementById('msg-img').src = img;
+        document.getElementById('messenger').style.display = 'flex';
+    }
+
+    function closeChat() { document.getElementById('messenger').style.display = 'none'; }
+
+    function showScreen(id, btn) {
+        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+        document.getElementById('screen-' + id).classList.add('active');
+        document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+    }
+
+    render();
+</script>
 
 </body>
 </html>
